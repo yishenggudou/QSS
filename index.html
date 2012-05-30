@@ -1,7 +1,10 @@
 <!DOCTYPE html><html lang="qss"><head><title>QSS Doc</title><meta charset="utf-8"><meta name="description" content="QSS"><link rel="stylesheet" href="style/garden.css" media="all"><link rel="stylesheet" href="style/print.css" media="print"><!--[if lt IE 9]>
 <script src="javascript/html5.js"></script>
 <![endif]-->
-</head><body><!-- Navigation--><nav id="nav_main"><div><ul><li class="active"><a href="/JavaScript-Garden/" title="QSS">qss</a></li></ul><a id="top" href="#intro" title="Back to top">#top</a><a id="hide_menu" class="tablet">Hide Menu</a></div><ul><li class="nav_intro"><h1><a href="#intro">QSS</a></h1><ul><li><a href="#intro.introduct">QSS简介</a></li></ul></li><li class="nav_sign"><h1><a href="#sign">访问控制</a></h1><ul><li><a href="#sign.introduct">访问控制简介</a></li><li><a href="#sign.sign">签名算法描述</a></li></ul></li><li class="nav_service"><h1><a href="#service">service操作</a></h1><ul><li><a href="#service.GetService">关于<code>QSS</code>的操作</a></li></ul></li><li class="nav_bucket"><h1><a href="#bucket">bucket操作</a></h1><ul><li><a href="#bucket.CreateBucket">创建<code>Bucket</code></a></li><li><a href="#bucket.GetBucket">获取<code>Bucket</code>文件列表</a></li><li><a href="#bucket.AclBucket">修改<code>Bucket</code>的<code>ACL</code></a></li><li><a href="#bucket.DeleteBucket">删除<code>Bucket</code></a></li></ul></li><li class="nav_object"><h1><a href="#object">object操作</a></h1><ul><li><a href="#object.Getobject"><code>Object</code>读操作</a></li><li><a href="#object.Postobject"><code>Object</code>创建操作</a></li><li><a href="#object.Putobject"><code>Object</code>更新操作</a></li><li><a href="#object.Deleteobject"><code>Object</code>删除操作</a></li></ul></li><li class="nav_errorcode"><h1><a href="#errorcode">错误代码</a></h1><ul><li><a href="#errorcode.errorformate"><code>QSS</code>错误响应格式</a></li><li><a href="#errorcode.ErrorList"><code>QSS</code>错误对照</a></li></ul></li><li class="nav_about"><h1><a href="#about">关于</a></h1><ul><li><a href="#about.aboutqss">关于QSS</a></li></ul></li></ul></nav><!-- Mobile navigation--><nav id="nav_mobile"><a id="nav_prev_section" href="#">prev section<span class="nav_section_name">section name</span></a><a id="nav_next_section" href="#">next section<span class="nav_section_name">section name</span></a><a id="show_menu">show menu</a></nav><!-- Sections--><section id="intro"><!-- Introduction--><header id="intro.intro"><h1>QSS</h1></header><!-- Articles--><article id="intro.introduct"><h2>QSS简介</h2><div><p>QSS是奇艺对外提供的海量，安全，低成本，高可靠的云存储服务。 用户可以通过简单的REST接口，在任何时间、任何地点上传和下载数据， 也可以使用WEB页面对数据进行管理。同时， QSS提供 SDK，简化用户的编程。 基于QSS，用户可以搭建出各种多媒体分享网站、网盘、个人企业数据备份等基于大规模数据的服务。</p></div></article></section><section id="sign"><!-- Introduction--><header id="sign.intro"><h1>访问控制</h1></header><!-- Articles--><article id="sign.introduct"><h2>访问控制简介</h2><div><p>访问控制说明 - 用户签名验证（Authentication）</p>
+</head><body><!-- Navigation--><nav id="nav_main"><div><ul><li class="active"><a href="/JavaScript-Garden/" title="QSS">qss</a></li></ul><a id="top" href="#intro" title="Back to top">#top</a><a id="hide_menu" class="tablet">Hide Menu</a></div><ul><li class="nav_intro"><h1><a href="#intro">QSS</a></h1><ul><li><a href="#intro.introduct">QSS简介</a></li></ul></li><li class="nav_sign"><h1><a href="#sign">访问控制</a></h1><ul><li><a href="#sign.introduct">访问控制简介</a></li><li><a href="#sign.sign">签名算法描述</a></li></ul></li><li class="nav_service"><h1><a href="#service">service操作</a></h1><ul><li><a href="#service.GetService">关于<code>QSS</code>的操作</a></li></ul></li><li class="nav_bucket"><h1><a href="#bucket">bucket操作</a></h1><ul><li><a href="#bucket.CreateBucket">创建<code>Bucket</code></a></li><li><a href="#bucket.GetBucket">获取<code>Bucket</code>文件列表</a></li><li><a href="#bucket.AclBucket">修改<code>Bucket</code>的<code>ACL</code></a></li><li><a href="#bucket.DeleteBucket">删除<code>Bucket</code></a></li></ul></li><li class="nav_object"><h1><a href="#object">object操作</a></h1><ul><li><a href="#object.Getobject"><code>Object</code>读操作</a></li><li><a href="#object.Postobject"><code>Object</code>创建操作</a></li><li><a href="#object.Putobject"><code>Object</code>更新操作</a></li><li><a href="#object.Deleteobject"><code>Object</code>删除操作</a></li></ul></li><li class="nav_errorcode"><h1><a href="#errorcode">错误代码</a></h1><ul><li><a href="#errorcode.errorformate"><code>QSS</code>错误响应格式</a></li><li><a href="#errorcode.ErrorList"><code>QSS</code>错误对照</a></li></ul></li><li class="nav_about"><h1><a href="#about">关于</a></h1><ul><li><a href="#about.aboutqss">关于QSS</a></li><li><a href="#about.bug">提交Bug和反馈</a></li><li><a href="#about.download">文档下载</a></li></ul></li></ul></nav><!-- Mobile navigation--><nav id="nav_mobile"><a id="nav_prev_section" href="#">prev section<span class="nav_section_name">section name</span></a><a id="nav_next_section" href="#">next section<span class="nav_section_name">section name</span></a><a id="show_menu">show menu</a></nav><!-- Sections--><section id="intro"><!-- Introduction--><header id="intro.intro"><h1>QSS</h1></header><!-- Articles--><article id="intro.introduct"><h2>QSS简介</h2><div><p>QSS是奇艺的网络存储服务。 
+用户可以通过简单的REST接口，在任何时间、
+任何地点上传和下载数据， 也可以使用<a href="http://webqss.inter.iqiyi.com">WEB</a>页面对数据进行管理。
+基于QSS，用户可以搭建出各种数据的服务。</p></div></article></section><section id="sign"><!-- Introduction--><header id="sign.intro"><h1>访问控制</h1></header><!-- Articles--><article id="sign.introduct"><h2>访问控制简介</h2><div><p>访问控制说明 - 用户签名验证（Authentication）</p>
 
 <p>QSS通过使用Access ID/Key对称加密的方法来验证某个请求的发送者身份。</p>
 
@@ -377,7 +380,12 @@ Authorization   QSS your_accesskey_id:H52yPB022WUrQWXWnQFZi8+nAhY=
 <pre><code>200
 </code></pre>
 
-<p>此时你做<code>service</code>操作,或者上 <a href="http://webqss.inter.iqiyi.com/" title="webconsole">webconsole</a> 查看可以看到<code>bucket</code>已经删除</p></div></article></section><section id="object"><!-- Introduction--><header id="object.intro"><h1>object操作</h1></header><!-- Articles--><article id="object.Getobject"><h2><code>Object</code>读操作</h2><div></div><div><h3><code>Object</code> GET操作</h3>
+<p>此时你做<code>service</code>操作,或者上 <a href="http://webqss.inter.iqiyi.com/" title="webconsole">webconsole</a> 查看可以看到<code>bucket</code>已经删除</p></div></article></section><section id="object"><!-- Introduction--><header id="object.intro"><h1>object操作</h1></header><!-- Articles--><article id="object.Getobject"><h2><code>Object</code>读操作</h2><div><h4>bucket的权限来确定如果是<code>PR</code>或者<code>PRW</code>时候直接获取资源如:</h4>
+
+<pre><code>GET   /webqss1/test.txt
+</code></pre>
+
+<h4>bucket的权限来确定如果是<code>PRI</code>的时候需要计算签名过程如下:</h4>
 
 <p>构造请求实例</p>
 
@@ -515,19 +523,23 @@ AccessDenied
 <tr><td>RequestTimeout       </td> <td>请求超时        </td><td>400       </td></tr>
 <tr><td>SignatureDoesNotMatch</td> <td>签名错误        </td><td>403       </td></tr>
 <tr><td>TooManyBuckets       </td> <td>用户的Bucket数目超过限制</td><td>400</td></tr>
-</tbody></table></div></article></section><section id="about"><!-- Introduction--><header id="about.intro"><h1>关于</h1></header><!-- Articles--><article id="about.aboutqss"><h2>关于QSS</h2><div><p>QSS是奇艺对外提供的海量，安全，低成本，高可靠的云存储服务。
+</tbody></table></div></article></section><section id="about"><!-- Introduction--><header id="about.intro"><h1>关于</h1></header><!-- Articles--><article id="about.aboutqss"><h2>关于QSS</h2><div><p>QSS是奇艺的网络存储服务。
 用户可以通过简单的REST接口，在任何时间、任何地点上传和下载数据，
 也可以使用WEB页面对数据进行管理。同时，
-QSS提供 SDK，简化用户的编程。
-基于QSS，用户可以搭建出各种多媒体分享网站、网盘、个人企业数据备份等基于大规模数据的服务。</p>
+基于QSS，用户可以搭建出各种数据的服务。</p>
 
 <ul>
 <li>QSS地址<a href="http://api.qss.inter.iqiyi.com">qss</a></li>
 <li>QSS Web地址<a href="http://webqss.inter.iqiyi.com">webqss</a></li>
+<li>Bug提交请移步<a href="https://github.com/yishenggudou/QSS/issues?state=open">github</a></li>
+</ul></div></article><article id="about.bug"><h2>提交Bug和反馈</h2><div><ul>
+<li>bug提交请移步<a href="https://github.com/yishenggudou/QSS/issues?state=open">github</a></li>
+</ul></div></article><article id="about.download"><h2>文档下载</h2><div><ul>
+<li>文档<a href="http://api.qss.inter.iqiyi.com/webqss/qss_doc.pdf"  target="_blank">qss下载</a></li>
 </ul></div></article></section><!-- Footer--><footer><p>Copyright &copy; 2011. Built with 
 <a href="http://nodejs.org/">Node.js </a>using a
 <a href="https://github.com/visionmedia/jade/">jade </a>template. 
 Hosted by 
 <a href="http://pages.github.com/">gh-pages</a>create by 
 <a href="http://webqss.inter.iqiyi.com/">qss</a>.
-</p></footer><script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script><script src="javascript/prettify.js"></script><script src="javascript/plugin.js"></script><script src="javascript/garden.js"></script></body></html>
+</p></footer><script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script><script src="javascript/prettify.js"></script><script src="javascript/plugin.js"></script><script src="javascript/garden.js"></script><script src="javascript/index.js"></script></body></html>

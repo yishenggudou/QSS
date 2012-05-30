@@ -18,6 +18,7 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 }
 body {
 	line-height: 1;
+
 }
 ol, ul {
 	list-style: none;
@@ -54,8 +55,8 @@ body {
 	margin: 0 auto;
 	font-family: Georgia, 'Nimbus Roman No9 L', 'Liberation Serif', serif;
 	font-size: 14px;
-	background: #0D2E4C;
-	color: #E6EAED;
+	background: #FFF;
+	color: #000;
 }
 
 #intro h1 {
@@ -108,7 +109,7 @@ nav > div li.active a {
 
 #nav_main > div {
 	overflow: hidden;
-	border-bottom: 1px solid #6E8294;
+	border-bottom: 1px solid #C9D7F1;
 }
 
 #nav_main > div ul {
@@ -126,7 +127,7 @@ nav > ul li:last-child a {
 }
 
 nav > ul > li {
-	border-bottom: 1px solid #6E8294;
+	border-bottom: 1px solid #C9D7F1;
 }
 
 /* Sprite map for sidebar icons */
@@ -162,19 +163,20 @@ nav a {
 nav a,
 nav ul,
 nav li {
-	background-color: #556c81;
+	background-color: #fff;
+    color:#000
 }
 
 nav a:hover,
 nav li.active,
 nav li.active a {
-	background-color: #344f68;
+	background-color: #fff;
 }
 
 nav li.active a:hover,
 nav li a.active,
 nav li a.active:hover {
-	background-color: #0D2E4C;
+	background-color: #bbccff;
 }
 
 nav a:hover, nav ul.active a:hover, nav a, nav li {
@@ -193,7 +195,7 @@ nav a:hover, nav ul.active a:hover, nav a, nav li {
 }
 
 section {
-	border-bottom: 4px dotted #8696a5;
+	border-bottom: 4px dotted #C9D7F1;
 	font-size: 16px;
 	margin-right: 410px;
 	position: relative;
@@ -202,7 +204,7 @@ section {
 section article,
 section header {
 	padding-bottom: 20px;
-	border-bottom: 1px solid #8696a5;
+	border-bottom: 1px solid #C9D7F1;
 }
 
 #intro article, #intro header {
@@ -228,7 +230,7 @@ pre {
 	padding: 8px 0 12px 20px;
 	border-left: 4px solid #566D82;
 	margin-bottom: 1.25em;
-	background: #0F192A;
+	background: #BBB;
 }
 
 code {
@@ -241,11 +243,11 @@ section pre code {
     padding: 0px;
     margin-top: 3px;
     margin-bottom: 1px;
-	background: #0F192A;
+	background: #68E;
 }
 
 section code {
-	background: #314D67;
+	background: #68E;
 	padding: 3px 4px 1px;
 }
 
@@ -325,7 +327,7 @@ article div {
 /* Asides */
 
 aside {
-	border-bottom: 1px solid #9eabb7;
+	border-bottom: 1px solid #C9D7F1;
 	padding-bottom: 0.625em;
 	position: absolute;
 	width: 180px;
@@ -391,12 +393,12 @@ footer {
 }
 
 a {
-	color: #FFA500;
+	color: #259;
 	text-decoration: none;
 }
 
 a:hover, a.active {
-	color: #FFC76D;
+	color: #15C;
 }
 
 abbr {
@@ -410,17 +412,17 @@ a abbr {
 
 /*  Syntax Highlighting */
 
-.str { color: #1DC116; }
-.kwd { color: #E83737; }
-.com { color: #428BDD; }
-.typ { color: #FFAA3E; }
-.lit { color: #D1EDFF; }
-.pun { color: #D1EDFF; }
-.tag { color: #fff; }
+.str { color: #000; }
+.kwd { color: #000; }
+.com { color: #000; }
+.typ { color: #000; }
+.lit { color: #000; }
+.pun { color: #000; }
+.tag { color: #000; }
 .atn { color: #606; }
 .atv { color: #080; }
 .dec { color: #606; }
-.pln { color: #FFAA3E; }
+.pln { color: #000; }
 
 /* Desktop override */
 
@@ -596,3 +598,5 @@ screen and (-webkit-min-device-pixel-ratio: 2) {
 }
 
 a[title=QSS] {display:none}
+
+span {background:#BBB}
