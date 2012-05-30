@@ -54,7 +54,7 @@ body {
 	margin: 0 auto;
 	font-family: Georgia, 'Nimbus Roman No9 L', 'Liberation Serif', serif;
 	font-size: 14px;
-	background: #BCF;
+	background: #0D2E4C;
 	color: #E6EAED;
 }
 
