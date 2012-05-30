@@ -1,0 +1,465 @@
+<!DOCTYPE html><html lang="qss"><head><title>QSS Doc</title><meta charset="utf-8"><meta name="description" content="QSS"><link rel="stylesheet" href="style/garden.css" media="all"><link rel="stylesheet" href="style/print.css" media="print"><!--[if lt IE 9]>
+<script src="javascript/html5.js"></script>
+<![endif]-->
+</head><body><!-- Navigation--><nav id="nav_main"><div><ul><li class="active"><a href="/JavaScript-Garden/" title="QSS">qss</a></li></ul><a id="top" href="#intro" title="Back to top">#top</a><a id="hide_menu" class="tablet">Hide Menu</a></div><ul><li class="nav_sign"><h1><a href="#sign">访问控制</a></h1><ul><li><a href="#sign.introduct">访问控制简介</a></li><li><a href="#sign.sign">签名算法描述</a></li></ul></li><li class="nav_service"><h1><a href="#service">service操作</a></h1><ul><li><a href="#service.GetService">关于<code>QSS</code>的操作</a></li></ul></li><li class="nav_bucket"><h1><a href="#bucket">bucket操作</a></h1><ul><li><a href="#bucket.CreateBucket">创建<code>Bucket</code></a></li><li><a href="#bucket.AclBucket"><code>Bucket</code>的<code>ACL</code></a></li><li><a href="#bucket.GetBucket"><code>Bucket</code>的<code>GET</code>操作</a></li></ul></li><li class="nav_object"><h1><a href="#object">object操作</a></h1><ul><li><a href="#object.Putobject"><code>Object</code>创建操作</a></li><li><a href="#object.Getobject"><code>Object</code>GET操作</a></li><li><a href="#object.Postobject"><code>Object</code>创建操作</a></li></ul></li><li class="nav_errorcode"><h1><a href="#errorcode">错误代码</a></h1><ul><li><a href="#errorcode.errorformate"><code>QSS</code>错误响应格式</a></li><li><a href="#errorcode.ErrorList"><code>QSS</code>错误对照</a></li></ul></li><li class="nav_about"><h1><a href="#about">关于</a></h1><ul><li><a href="#about.aboutqss">关于QSS</a></li></ul></li></ul></nav><!-- Mobile navigation--><nav id="nav_mobile"><a id="nav_prev_section" href="#">prev section<span class="nav_section_name">section name</span></a><a id="nav_next_section" href="#">next section<span class="nav_section_name">section name</span></a><a id="show_menu">show menu</a></nav><!-- Sections--><section id="sign"><!-- Introduction--><header id="sign.intro"><h1>访问控制</h1></header><!-- Articles--><article id="sign.introduct"><h2>访问控制简介</h2><div><p>访问控制说明 - 用户签名验证（Authentication）</p>
+
+<p>QSS通过使用Access ID/Key对称加密的方法来验证某个请求的发送者身份。</p>
+
+<aside>
+  <p><em>* 注: *</em>AccessID 和 AccessKey 可以在<a href="http://webqss.inter.iqiyi.com/showkey/" title="showkey">webqss</a>中看到</p>
+</aside>
+
+<ul>
+<li><code>AccessID</code>用于标示用户，</li>
+<li><code>AccessKey</code>是用户用于加密签名字符串和<code>QSS</code>用来验证签名字符串的密钥，</li>
+</ul>
+
+<p>其中AccessKey必须保密，只有用户和QSS知道。</p>
+
+<h4>当用户想以个人身份向QSS发送请求时，需要一下三歩：</h4>
+
+<ul>
+<li>将发送的请求按照QSS指定的格式生成签名字符串；然后使用<code>AccessKey</code>对签名字符串进行加密产生验证码。 </li>
+<li>将签名字符串加入HTTP Headers </li>
+<li>向服务器发送请求</li>
+</ul>
+
+<p><img src="http://api.qss.inter.iqiyi.com/webqss/qss_request.png" alt="发送请求" title="" /></p>
+
+<h4>QSS收到请求以后</h4>
+
+<ul>
+<li>通过AccessID找到对应的AccessKey，</li>
+<li>以同样的方法提取签名字符串和验证码，</li>
+<li>如果计算出来的验证码和提供的一样即认为该请求是有效的,返回请求的资源</li>
+<li>如果计算出来的验证码和提供的不一致QSS将拒绝处理这次请求，并返回正确的错误码。</li>
+</ul>
+
+<p><img src="http://api.qss.inter.iqiyi.com/webqss/qss_response.png" alt="QSS应答" title="" /></p></div></article><article id="sign.sign"><h2>签名算法描述</h2><div><aside>
+  <p><em>* 注: *</em>CanonicalizedResource即为<code>/&lt;bucket&gt;/&lt;your_object&gt;</code>， 如:<code>/webqss/test.txt</code></p>
+</aside>
+
+<pre><code>Authorization = "QSS" + " " + AccessKeyId + ":" + Signature;
+
+Signature = Base64( HMAC-SHA1( YourSecretAccessKeyID,
+                    UTF-8-Encoding-Of( StringToSign ) ) );
+
+StringToSign = HTTP-Verb + "\n" +
+    Content-MD5 + "\n" +
+    Content-Type + "\n" +
+    Date + "\n" +
+    CanonicalizedAmzHeaders +
+    CanonicalizedResource;
+
+CanonicalizedResource = [ "/" + Bucket ] +  [object]
+</code></pre>
+
+<p>计算得到<code>Signature</code> 之后将签名附加到header之中，构建实例如下：</p>
+
+<pre><code>GET    /webqss1
+Date    201205291532
+Authorization   QSS your_accesskey_id:H52yPB022WUrQWXWnQFZi8+nAhY=
+</code></pre></div></article></section><section id="service"><!-- Introduction--><header id="service.intro"><h1>service操作</h1></header><!-- Articles--><article id="service.GetService"><h2>关于<code>QSS</code>的操作</h2><div></div><div><h3>GetService->列出文件夹列表</h3>
+
+<p>对<code>QSS</code>根目录请求的时候可以获得用户的<code>bucket</code>列表</p>
+
+<aside>
+  <p><em>*注： *</em>此为http的请求头实例,请求的域名为 http://api.qss.inter.iqiyi.com/</p>
+</aside>
+
+<pre><code>GET   /
+Date    201205291507
+Authorization   QSS your_accesskey_id:eQxDBqGdTLNm/roYm0ozNwJs3Ck=
+</code></pre>
+
+<p>返回实例</p>
+
+<aside>
+  <p><em>*注:  *</em>如果签名不正确或者没有权限,返回错误代码参见错误代码列表</p>
+</aside>
+
+<pre><code>&lt;?xml version="1.0" ?&gt;
+&lt;ListAllMyBucketsResult&gt;
+  &lt;Owner&gt;
+    &lt;DisplayName&gt;
+      &lt;display_name&gt;
+        your_name
+      &lt;/display_name&gt;
+      &lt;login_email&gt;
+        youremail@gmail.com
+      &lt;/login_email&gt;
+    &lt;/DisplayName&gt;
+    &lt;ID&gt;
+      30
+    &lt;/ID&gt;
+  &lt;/Owner&gt;
+  &lt;Buckets&gt;
+    &lt;Bucket&gt;
+      &lt;CreationDate&gt;
+        2012-05-23 17:59:31
+      &lt;/CreationDate&gt;
+      &lt;Name&gt;
+        timger
+      &lt;/Name&gt;
+    &lt;/Bucket&gt;
+    &lt;Bucket&gt;
+      &lt;CreationDate&gt;
+        2012-05-23 18:01:46
+      &lt;/CreationDate&gt;
+      &lt;Name&gt;
+        haibo
+      &lt;/Name&gt;
+    &lt;/Bucket&gt;
+    &lt;Bucket&gt;
+      &lt;CreationDate&gt;
+        2012-05-23 18:24:04
+      &lt;/CreationDate&gt;
+      &lt;Name&gt;
+        google
+      &lt;/Name&gt;
+    &lt;/Bucket&gt;
+    &lt;Bucket&gt;
+      &lt;CreationDate&gt;
+        2012-05-23 18:24:10
+      &lt;/CreationDate&gt;
+      &lt;Name&gt;
+        qiyi
+      &lt;/Name&gt;
+    &lt;/Bucket&gt;
+    &lt;Bucket&gt;
+      &lt;CreationDate&gt;
+        2012-05-24 18:51:32
+      &lt;/CreationDate&gt;
+      &lt;Name&gt;
+        webqss
+      &lt;/Name&gt;
+    &lt;/Bucket&gt;
+    &lt;Bucket&gt;
+      &lt;CreationDate&gt;
+        2012-05-24 19:09:35
+      &lt;/CreationDate&gt;
+      &lt;Name&gt;
+        wss
+      &lt;/Name&gt;
+    &lt;/Bucket&gt;
+  &lt;/Buckets&gt;
+&lt;/ListAllMyBucketsResult&gt;
+</code></pre></div></article></section><section id="bucket"><!-- Introduction--><header id="bucket.intro"><h1>bucket操作</h1></header><!-- Articles--><article id="bucket.CreateBucket"><h2>创建<code>Bucket</code></h2><div><p>构建请求实例如下</p>
+
+<aside>
+  <p><em>* 注: *</em>Content-Length 为必须参数,否则报错,此属于<code>HTTP</code>协议的规范</p>
+</aside>
+
+<pre><code>PUT    /webqss1
+Content-Length  0
+Date    201205291532
+Authorization   QSS your_accesskey_id:H52yPB022WUrQWXWnQFZi8+nAhY=
+</code></pre>
+
+<p>返回实例如下</p>
+
+<aside>
+  <p><em>* 注: *</em>成功则返回200状态码,错误则返回错误集</p>
+</aside>
+
+<pre><code>200
+</code></pre>
+
+<p>此时你做<code>service</code>操作,或者上 <a href="http://webqss.inter.iqiyi.com/" title="webconsole">webconsole</a> 查看可以看到刚创建的<code>bucket</code></p></div></article><article id="bucket.AclBucket"><h2><code>Bucket</code>的<code>ACL</code></h2><div><p><code>ACL</code>简介</p>
+
+<p>QSS提供Bucket级别的权限访问控制，Bucket目前有三种访问权限：<code>PRW</code>(public-read-write)，<code>PR</code>(public-read)和<code>PRI</code>(private)，它们的含义如下：</p>
+
+<ul>
+<li><code>PRW</code> public-read-write：任何人（包括匿名访问）都可以对该Bucket中的Object进行PUT，Get和Delete操作；所有这些操作产生的费用由该Bucket的创建者承担，请慎用该权限。</li>
+<li><code>PR</code>  public-read：只有该Bucket的创建者可以对该Bucket内的Object进行写操作（包括PUT和Delete Object）；任何人（包括匿名访问）可以对该Bucket中的Object进行读操作（Get Object）。</li>
+<li><code>PRI</code> private：只有该Bucket的创建者可以对该Bucket内的Object进行读写操作（包括Put、Delete和Get Object）；其他人无法访问该Bucket内的Object。</li>
+</ul>
+
+<p>用户新创建一个新Bucket时，如果不指定Bucket权限，OSS会自动为该Bucket设置private权限。对于一个已经存在的Bucket，只有它的创建者可以修改该Bucket的权限。</p>
+
+<table>
+<thead>
+<tr>
+<th>
+ACL key
+</th>
+<th>
+ACL 值  
+</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>PRI</td><td>私有</td></tr>     
+<tr><td>PR</td><td>公有读写</td></tr>     
+<tr><td>PRI</td><td>公有读</td></tr>     
+</tbody>
+</table>
+
+</div><div><h3>获取<code>Bucket</code>的<code>ACL</code></h3>
+
+<p><code>GET</code>方法获取<code>bucket</code>的<code>ACL</code>
+构建请求实例如下</p>
+
+<aside>
+  <p><em>* 注: *</em>计算签名的时候传入的url忽略GET后面跟的参数<code>?acl</code></p>
+</aside>
+
+<pre><code>GET    /webqss1?acl
+Date    201205291547
+Authorization   QSS your_accesskey_id:kAmiNE4DhEH4/90//lOvlJrPLAI=
+</code></pre>
+
+<p>返回实例如下</p>
+
+<pre><code>&lt;?xml version="1.0" ?&gt;
+&lt;AccessControlPolicy&gt;
+  &lt;Owner&gt;
+    &lt;DisplayName&gt;
+      &lt;display_name&gt;
+        your_name
+      &lt;/display_name&gt;
+      &lt;login_email&gt;
+        youremail@gmail.com
+      &lt;/login_email&gt;
+    &lt;/DisplayName&gt;
+    &lt;ID&gt;
+      30
+    &lt;/ID&gt;
+  &lt;/Owner&gt;
+  &lt;Name&gt;
+    webqss1
+  &lt;/Name&gt;
+  &lt;ACL&gt;
+    PRI
+  &lt;/ACL&gt;
+&lt;/AccessControlPolicy&gt;
+</code></pre>
+
+</div><div><h3>修改<code>Bucket</code>的权限</h3>
+
+<p>构建请求实例如下</p>
+
+<aside>
+  <p><em>* 注: *</em>Content-Length 为必须参数,否则报错,?acl=<code>[PR,PRI,PRW]</code></p>
+</aside>
+
+<pre><code>PUT    /webqss1?acl=PR
+Date    201205291602
+Content-Length  0
+Authorization   QSS your_accesskey_id:stROR93zNP2tniS6S4W7V58/awo=
+</code></pre>
+
+<p>返回实例如下</p>
+
+<aside>
+  <p><em>* 注: *</em>成功则返回200状态码,错误则返回错误集</p>
+</aside>
+
+<pre><code>200
+</code></pre></div></article><article id="bucket.GetBucket"><h2><code>Bucket</code>的<code>GET</code>操作</h2><div><p>请求实例如下</p>
+
+<pre><code>GET   /webqss
+User-Agent  python-requests/0.10.8
+Date    201205291519
+Authorization   QSS your_accesskey_id:w1Nfnzx/LLj8AeMs1+xunIYq7fk=
+</code></pre>
+
+<aside>
+  <p><em>*注: *</em>计算签名的时候用相对地址计算</p>
+</aside>
+
+<p>返回实例如下</p>
+
+<pre><code>&lt;?xml version="1.0" ?&gt;
+&lt;ListBucketResult&gt;
+  &lt;Name&gt;
+    webqss
+  &lt;/Name&gt;
+  &lt;Contents&gt;
+    &lt;Owner&gt;
+      &lt;DisplayName&gt;
+        &lt;display_name&gt;
+          your_name
+        &lt;/display_name&gt;
+        &lt;login_email&gt;
+          youremail@gmail.com
+        &lt;/login_email&gt;
+      &lt;/DisplayName&gt;
+      &lt;ID&gt;
+        30
+      &lt;/ID&gt;
+    &lt;/Owner&gt;
+    &lt;LastModified&gt;
+      2012-05-25 14:51:24
+    &lt;/LastModified&gt;
+    &lt;MD5&gt;
+      cc3994cdb7c3566f0f15141d27ebf344
+    &lt;/MD5&gt;
+    &lt;Key&gt;
+      /webqss/Screenshot-2012-01-18 14:58:00.png
+    &lt;/Key&gt;
+    &lt;Size&gt;
+      75279
+    &lt;/Size&gt;
+  &lt;/Contents&gt;
+  &lt;Contents&gt;
+    &lt;Owner&gt;
+      &lt;DisplayName&gt;
+        &lt;display_name&gt;
+          your_name
+        &lt;/display_name&gt;
+        &lt;login_email&gt;
+          youremail@gmail.com
+        &lt;/login_email&gt;
+      &lt;/DisplayName&gt;
+      &lt;ID&gt;
+        30
+      &lt;/ID&gt;
+    &lt;/Owner&gt;
+    &lt;LastModified&gt;
+      2012-05-25 14:51:24
+    &lt;/LastModified&gt;
+    &lt;MD5&gt;
+      ff3adfbb039ccd599ddd6e4599d1342b
+    &lt;/MD5&gt;
+    &lt;Key&gt;
+      /webqss/Screenshot-2012-02-01 18:04:32.png
+    &lt;/Key&gt;
+    &lt;Size&gt;
+      277065
+    &lt;/Size&gt;
+  &lt;/Contents&gt;
+  &lt;Contents&gt;
+    &lt;Owner&gt;
+      &lt;DisplayName&gt;
+        &lt;display_name&gt;
+          your_name
+        &lt;/display_name&gt;
+        &lt;login_email&gt;
+          youremail@gmail.com
+        &lt;/login_email&gt;
+      &lt;/DisplayName&gt;
+      &lt;ID&gt;
+        30
+      &lt;/ID&gt;
+    &lt;/Owner&gt;
+    &lt;LastModified&gt;
+      2012-05-25 14:51:23
+    &lt;/LastModified&gt;
+    &lt;MD5&gt;
+      98a295cec1140e0826ad49532ea6c9b1
+    &lt;/MD5&gt;
+    &lt;Key&gt;
+      /webqss/Screenshot-2011-12-16 16:58:21.png
+    &lt;/Key&gt;
+    &lt;Size&gt;
+      37166
+    &lt;/Size&gt;
+  &lt;/Contents&gt;
+&lt;/ListBucketResult&gt;
+</code></pre></div></article></section><section id="object"><!-- Introduction--><header id="object.intro"><h1>object操作</h1></header><!-- Articles--><article id="object.Putobject"><h2><code>Object</code>创建操作</h2><div><p>构造请求实例</p>
+
+<pre><code>POST   /webqss1/test.txt
+Date    201205291622
+Authorization   QSS your_accesskey_id:8Wp31uVvWBfQke0d2+CmTyfp/3o=
+</code></pre>
+
+<p>返回实体</p>
+
+<p>如果验证通过直接返回文件</p></div></article><article id="object.Getobject"><h2><code>Object</code>GET操作</h2><div></div><div><h3>下载文件</h3>
+
+<p>构造请求实例</p>
+
+<pre><code>GET   /webqss1/test.txt
+Date    201205291622
+Content-Type    multipart/form-data; boundary=127.0.0.1.1000.5055.1338287496.638.1
+Content-Length  10
+Authorization   QSS your_accesskey_id:8Wp31uVvWBfQke0d2+CmTyfp/3o=
+</code></pre>
+
+<aside>
+  <p><em>*注: *</em>POST文件的form的文件对应的键值为file,否则返回状态200和0</p>
+</aside>
+
+<p>返回实体
++   成功返回200
++   失败返回错误信息</p>
+
+<p>如果验证通过直接返回文件</p></div></article><article id="object.Postobject"><h2><code>Object</code>创建操作</h2><div><p>构造请求实例</p>
+
+<pre><code>POST   /webqss1/test.txt
+Date    201205291622
+Authorization   QSS your_accesskey_id:8Wp31uVvWBfQke0d2+CmTyfp/3o=
+</code></pre>
+
+<p>返回实体</p>
+
+<p>如果验证通过直接返回文件</p></div></article></section><section id="errorcode"><!-- Introduction--><header id="errorcode.intro"><h1>错误代码</h1></header><!-- Articles--><article id="errorcode.errorformate"><h2><code>QSS</code>错误响应格式</h2><div><p>当用户访问QSS出错时，QSS会返回给用户一个合适的<code>3xx</code>，<code>4xx</code>或者<code>5xx</code>的HTTP状态码；以及一个<code>application/xml</code>格式的消息体。</p>
+
+<p>错误响应的消息体例子：</p>
+
+<pre><code>&lt;?xml version="1.0" ?&gt;
+&lt;Error&gt;
+  &lt;Code&gt;
+    AccessDenied
+  &lt;/Code&gt;
+  &lt;Message&gt;
+
+  &lt;/Message&gt;
+  &lt;Resource&gt;
+
+  &lt;/Resource&gt;
+  &lt;RequestId&gt;
+
+  &lt;/RequestId&gt;
+&lt;/Error&gt;
+</code></pre>
+
+<aside>
+  <p><em>*注释: *</em> Resource以上的key可能为空</p>
+</aside>
+
+<p>所有错误的消息体中都包括以下几个元素：
++   Code：QSS返回给用户的错误码。
++   Message：QSS给出的详细错误信息。
++   RequestId：用于唯一标识该次请求的UUID；当你无法解决问题时，可以凭这个RequestId来请求QSS开发工程师的帮助。
++   REsource：请求资源的位置如 <code>/youremail/a.txt</code>。</p></div></article><article id="errorcode.ErrorList"><h2><code>QSS</code>错误对照</h2><div><p>QSS的错误码对应的意思如下列表</p>
+
+<p>|  错误码              | 描述           |HTTP状态码|
+|:---------------------|---------------:|---------:|
+|AccessDenied          |拒绝访问        |403       |
+|BucketAlreadyExists   |Bucket已经存在  |409       |
+|BucketNotEmpty        |Bucket不为空    |409       |
+|FileGroupTooLarge     |文件组过大      |400       |
+|FilePartStale         |文件Part过时    |400       |
+|InvalidArgument       |参数格式错误    |400       |
+|InvalidAccessKeyId    |Access ID不存在 |403       |
+|InvalidBucketName     |无效的Bucket名字|400       |
+|InvalidObjectName     |无效的Object名字|400       |
+|InvalidPart           |无效的Part      |400       |
+|InvalidPartOrder      |无效的part顺序  |400       |
+|InternalError         |QSS内部发生错误 |500       |
+|MissingContentLength  |缺少内容长度    |411       |
+|NoSuchBucket          |Bucket不存在    |404       |
+|NoSuchKey             |文件不存在      |404       |
+|NotImplemented        |无法处理的方法  |501       |
+|PreconditionFailed    |预处理错误      |412       |
+|RequestTimeTooSkewed  |发起请求的时间和服务器时间超出15分钟|403|
+|RequestTimeout        |请求超时        |400       |
+|SignatureDoesNotMatch |签名错误        |403       |
+|TooManyBuckets        |用户的Bucket数目超过限制|400|</p></div></article></section><section id="about"><!-- Introduction--><header id="about.intro"><h1>关于</h1></header><!-- Articles--><article id="about.aboutqss"><h2>关于QSS</h2><div><p>QSS是奇艺对外提供的海量，安全，低成本，高可靠的云存储服务。
+用户可以通过简单的REST接口，在任何时间、任何地点上传和下载数据，
+也可以使用WEB页面对数据进行管理。同时，
+QSS提供 SDK，简化用户的编程。
+基于QSS，用户可以搭建出各种多媒体分享网站、网盘、个人企业数据备份等基于大规模数据的服务。</p>
+
+<ul>
+<li>QSS地址<a href="http://api.qss.inter.iqiyi.com">qss</a></li>
+<li>QSS Web地址<a href="http://webqss.inter.iqiyi.com">webqss</a></li>
+</ul></div></article></section><!-- Footer--><footer><p>Copyright &copy; 2011. Built with 
+<a href="http://nodejs.org/">Node.js </a>using a
+<a href="https://github.com/visionmedia/jade/">jade </a>template. 
+Hosted by 
+<a href="http://pages.github.com/">gh-pages</a>create by 
+<a href="http://webqss.inter.iqiyi.com/">qss</a>.
+</p></footer><script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script><script src="javascript/prettify.js"></script><script src="javascript/plugin.js"></script><script src="javascript/garden.js"></script></body></html>
